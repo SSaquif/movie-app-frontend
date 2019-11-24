@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Movies from './components/movies';
 import './App.css';
 import Navbar from './components/navbar';
@@ -10,7 +10,9 @@ class App extends Component {
 			<React.Fragment>
 				<Navbar />
 				<main className="container">
-					<Movies />
+					<Switch>
+						<Route path="/" component={Movies} />
+					</Switch>
 				</main>
 			</React.Fragment>
 		);
