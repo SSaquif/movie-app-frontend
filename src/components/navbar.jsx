@@ -7,10 +7,10 @@ const Navbar = () => {
 				<div className="collapse-navbar-collapse" id="navbarNav">
 					<ul className="navbar-nav">
 						<li className="nav-item">
-							<Link to="">Login</Link>
+							<Link to="/login">Login</Link>
 						</li>
 						<li className="nav-item">
-							<Link to="">Home</Link>
+							<Link to="/">Home</Link>
 						</li>
 					</ul>
 				</div>
