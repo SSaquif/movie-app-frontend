@@ -4,6 +4,7 @@ import { getGenres } from '../services/helperGenreDB';
 import Like from './common/like';
 import Pagination from './common/pagination';
 import ListGroup from './common/listGroup';
+import MoviesTable from './moviesTable';
 import { paginate } from '../utils/paginate';
 
 class Movies extends Component {
@@ -122,49 +123,17 @@ class Movies extends Component {
 							//Now using defaultprops in Component instead (https://reactjs.org/docs/react-component.html near the end for defaultprops)
 							//textProperty="name" //adding this two property props
 							//uniqueKeyProperty="_id" // to make the list component more reusable in other apps
-						></ListGroup>
+						/>
 					</div>
 					<div className="column-right">
 						<p>
 							<b>Showing {filteredMovies.length} movies found in database</b>
 						</p>
-						<table className="table">
-							<thead>
-								<tr>
-									<th>Title</th>
-									<th>genre</th>
-									<th>Stock</th>
-									<th>Daily Rate</th>
-									<th></th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								{paginatedMovies.map((movie) => (
-									<tr key={movie._id}>
-										<td>{movie.title}</td>
-										<td>{movie.genre.name}</td>
-										<td>{movie.numberInStock}</td>
-										<td>{movie.dailyRentalRate}</td>
-										<td>
-											<Like
-												liked={movie.liked}
-												onClick={() => this.handleLike(movie)}
-											/>
-										</td>
-										<td>
-											<button
-												className="btn btn-danger btn-sm"
-												onClick={() => this.handleDelete(movie)}
-											>
-												{' '}
-												Delete
-											</button>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
+						<MoviesTable
+							movies={paginatedMovies}
+							onLike={this.handleLike}
+							onDelete={this.handleDelete}
+						/>
 						{/*Our Pagination component will need to know the following:: */}
 						{/*Total Number of Items(ie:the movie count)::which we already have)*/}
 						{/*No of items(ie:movies)per page::We should store this in state, cause this can change)*/}
