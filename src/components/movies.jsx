@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { getMovies, deleteMovie } from '../services/helperMovieDB';
 import { getGenres } from '../services/helperGenreDB';
-import Like from './common/like';
 import Pagination from './common/pagination';
 import ListGroup from './common/listGroup';
 import MoviesTable from './moviesTable';
 import { paginate } from '../utils/paginate';
+import lodash from 'lodash';
 
 class Movies extends Component {
 	state = {
@@ -15,7 +15,9 @@ class Movies extends Component {
 		genres: [],
 		pageSize: 4,
 		currentPage: 1,
-		selectedGenre: ''
+		selectedGenre: '',
+		sortCriteria: 'title', //initial sorting criteria
+		sortOrder: 'asc' //initial sorting order
 	};
 
 	//This method is called when an instance of the component is rendered in the DOM
@@ -72,6 +74,16 @@ class Movies extends Component {
 		this.setState({ movies: updatedMovies });
 	};
 
+	handleSort = (sortCriteria) => {
+		console.log(sortCriteria);
+		let sortOrder = this.state.sortOrder; //dont mutate state directly ever, copy it first
+
+		sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+
+		//this.setState({ sortCriteria: sortCriteria, sortOrder: sortOrder });
+		this.setState({ sortCriteria, sortOrder }); //same as above
+	};
+
 	handleGenreSelect = (genre) => {
 		console.log(genre);
 		//Remeber when state changes, The component and all its children are re rendered
@@ -86,14 +98,18 @@ class Movies extends Component {
 		//TODO:Will not have to do this.state everytime (seems like convention to use destructuring in REACT)
 		//const count = this.state.movies.length;
 		//const { length: count1 } = this.state.movies; //OBJECT DESTRUCTURING SYNTAX OF ABOVE
-
+		console.log('ClassComponent::this.props', this.props);
+		//STEP BASIC:: Destructure state for cleaner code
 		const {
 			selectedGenre,
 			currentPage,
 			pageSize,
+			sortCriteria,
+			sortOrder,
 			movies: allMovies //renaming movies to allMovies
 		} = this.state;
 
+		//Step 1:: FILTER the movies to be shown
 		//remember empty string is falsy
 		const filteredMovies =
 			selectedGenre && selectedGenre.name !== 'All Genres'
@@ -103,7 +119,18 @@ class Movies extends Component {
 				  })
 				: allMovies;
 
-		const paginatedMovies = paginate(filteredMovies, currentPage, pageSize);
+		console.log('filteredMovies::', filteredMovies);
+
+		//STEP 2::SORT Movies by correct criteria nad order
+		//see orderBy doc
+		const sortedMovies = lodash.orderBy(
+			filteredMovies,
+			[sortCriteria],
+			[sortOrder]
+		);
+
+		//STEP 3::PAGINATE to fit into pageSize
+		const paginatedMovies = paginate(sortedMovies, currentPage, pageSize);
 
 		if (filteredMovies.length === 0) {
 			return (
@@ -132,6 +159,7 @@ class Movies extends Component {
 						<MoviesTable
 							movies={paginatedMovies}
 							onLike={this.handleLike}
+							onSort={this.handleSort}
 							onDelete={this.handleDelete}
 						/>
 						{/*Our Pagination component will need to know the following:: */}

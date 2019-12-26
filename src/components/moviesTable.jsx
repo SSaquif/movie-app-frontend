@@ -5,16 +5,23 @@ const MoviesTable = (props) => {
 	//like to do my object destructuring at the very start of every functional component
 	//think of stuff i dont have::PaginatedMovie, handleLike and handleDelete in this SFS anymore (is in movies)
 	//This should be gotten from props passed from movies now
-	const { movies, onDelete, onLike } = props;
+	//Delete,sort and like handled by parent cuase it has the state which has the movies[] array, that is used for this ops
+	const { movies, onDelete, onLike, onSort } = props;
+	//console.log('moviesTable::this.props::', this.props);
+	console.log('moviesTable::props::', props);
 	return (
 		<React.Fragment>
 			<table className="table">
 				<thead>
 					<tr>
-						<th>Title</th>
-						<th>genre</th>
-						<th>Stock</th>
-						<th>Daily Rate</th>
+						{/* the arguments are the objectKeys of the movies object*/}
+						{/* note that genre is object so genre name is nested, hence genre.name */}
+						{/* this is how lodash's orderBy needs them, which I'm using foe sorting*/}
+						{console.log('MovieTable::movies::', movies)}
+						<th onClick={() => onSort('title')}>Title</th>
+						<th onClick={() => onSort('genre.name')}>Genre</th>
+						<th onClick={() => onSort('numberInStock')}>Stock</th>
+						<th onClick={() => onSort('dailyRentalRate')}>Daily Rate</th>
 						<th></th>
 						<th></th>
 					</tr>
