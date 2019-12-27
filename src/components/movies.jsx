@@ -74,13 +74,10 @@ class Movies extends Component {
 		this.setState({ movies: updatedMovies });
 	};
 
-	handleSort = (sortCriteria) => {
-		console.log(sortCriteria);
-		let sortOrder = this.state.sortOrder; //dont mutate state directly ever, copy it first
-
-		sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-
-		//this.setState({ sortCriteria: sortCriteria, sortOrder: sortOrder });
+	handleSort = (sortCriteria, sortOrder) => {
+		//This method should just update the state of variables that defines sorting in render
+		//The main logic moved to child componenets raiseSort, which determines the 2 variables
+		//and passes it here
 		this.setState({ sortCriteria, sortOrder }); //same as above
 	};
 
@@ -122,7 +119,8 @@ class Movies extends Component {
 		console.log('filteredMovies::', filteredMovies);
 
 		//STEP 2::SORT Movies by correct criteria nad order
-		//see orderBy doc
+		//see lodash orderBy doc
+		//params [moviesArray, sortCriteriaArray(correspond to moviesArray keys) , sortOrderArray]
 		const sortedMovies = lodash.orderBy(
 			filteredMovies,
 			[sortCriteria],
@@ -158,6 +156,8 @@ class Movies extends Component {
 						</p>
 						<MoviesTable
 							movies={paginatedMovies}
+							sortCriteria={sortCriteria}
+							sortOrder={sortOrder}
 							onLike={this.handleLike}
 							onSort={this.handleSort}
 							onDelete={this.handleDelete}
