@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Like from './common/like';
+import TableHeader from './common/tableHeader';
 
 class MoviesTable extends Component {
 	raiseSort = (sortCriteria, sortOrder) => {
@@ -12,32 +13,30 @@ class MoviesTable extends Component {
 		//think of stuff i dont have::PaginatedMovie, handleLike and handleDelete in this SFS anymore (is in movies)
 		//This should be gotten from props passed from movies now
 		//Delete,sort and like handled by parent cuase it has the state which has the movies[] array, that is used for this ops
-		const { movies, onDelete, onLike, sortOrder } = this.props;
-		//console.log('moviesTable::this.props::', this.props);
+		const { movies, onDelete, onLike, sortOrder, onSort } = this.props;
+
+		//columnKey are the objectKeys of the movies object (see the console to see what they are)
+		//note that genre is nested object hence column key = genre.name
+		//this is how lodash's orderBy needs them, which I'm using for sorting
 		console.log('moviesTable::props::', this.props);
+		//Setting my columns in an Array to be passed as props
+		const columns = [
+			{ columnHeader: 'Title', columnKey: 'title' },
+			{ columnHeader: 'Genre', columnKey: 'genre.name' },
+			{ columnHeader: 'Stock', columnKey: 'numberInStock' },
+			{ columnHeader: 'Daily Rate', columnKey: 'dailyRentalRate' },
+			{ key: 'like' },
+			{ key: 'delete' }
+		];
+
 		return (
 			<React.Fragment>
 				<table className="table">
-					<thead>
-						<tr>
-							{/* the arguments are the objectKeys of the movies object*/}
-							{/* note that genre is object so genre name is nested, hence genre.name */}
-							{/* this is how lodash's orderBy needs them, which I'm using foe sorting*/}
-							{console.log('MovieTable::movies::', movies)}
-							<th onClick={() => this.raiseSort('title', sortOrder)}>Title</th>
-							<th onClick={() => this.raiseSort('genre.name', sortOrder)}>
-								Genre
-							</th>
-							<th onClick={() => this.raiseSort('numberInStock', sortOrder)}>
-								Stock
-							</th>
-							<th onClick={() => this.raiseSort('dailyRentalRate', sortOrder)}>
-								Daily Rate
-							</th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
+					<TableHeader
+						columns={columns}
+						sortOrder={sortOrder}
+						onSort={onSort}
+					/>
 					<tbody>
 						{/* {paginatedMovies.map((movie) => ( */}
 						{movies.map((movie) => (
