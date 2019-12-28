@@ -12,6 +12,10 @@ class TableBody extends Component {
 			return lodash.get(row, column.columnKey);
 		}
 	};
+
+	createUniqueKey = (row, column) => {
+		return row._id + (column.columnKey || column.key);
+	};
 	render() {
 		const { rows, columns } = this.props;
 		console.log('TableBody::this.props.rows', rows);
@@ -26,7 +30,7 @@ class TableBody extends Component {
 								{columns.map((column) => {
 									console.log('TableBody::column', column);
 									return (
-										<td key={column.columnKey || column.key}>
+										<td key={this.createUniqueKey(row, column)}>
 											{this.renderCell(row, column)}
 										</td>
 									);
