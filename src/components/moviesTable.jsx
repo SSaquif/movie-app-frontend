@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import Like from './common/like';
 import TableHeader from './common/tableHeader';
+import TableBody from './common/tableBody';
+
+//For example, hence
+//This is a valid react element and react elements are just regularjavascript objects
+const reactElem = <p></p>;
 
 class MoviesTable extends Component {
 	raiseSort = (sortCriteria, sortOrder) => {
@@ -20,13 +25,35 @@ class MoviesTable extends Component {
 		//this is how lodash's orderBy needs them, which I'm using for sorting
 		console.log('moviesTable::props::', this.props);
 		//Setting my columns in an Array to be passed as props
+		//columnKey value should correspond to key names in our data/row(ie movies) object
 		const columns = [
 			{ columnHeader: 'Title', columnKey: 'title' },
 			{ columnHeader: 'Genre', columnKey: 'genre.name' },
 			{ columnHeader: 'Stock', columnKey: 'numberInStock' },
 			{ columnHeader: 'Daily Rate', columnKey: 'dailyRentalRate' },
-			{ key: 'like' },
-			{ key: 'delete' }
+			{
+				key: 'like',
+				content: (movie) => (
+					<Like
+						liked={movie.liked}
+						//onClick={() => this.handleLike(movie)} //now gotten via props
+						onClick={() => this.props.onLike(movie)}
+					/>
+				)
+			}, //content is reactelem = regular JS object
+			{
+				key: 'delete',
+				//content is function that takes one element
+				//and returns a react element===JS object
+				content: (movie) => (
+					<button
+						className="btn btn-danger btn-sm"
+						onClick={() => this.props.onDelete(movie)}
+					>
+						Delete
+					</button>
+				)
+			}
 		];
 
 		return (
@@ -37,34 +64,7 @@ class MoviesTable extends Component {
 						sortOrder={sortOrder}
 						onSort={onSort}
 					/>
-					<tbody>
-						{/* {paginatedMovies.map((movie) => ( */}
-						{movies.map((movie) => (
-							<tr key={movie._id}>
-								<td>{movie.title}</td>
-								<td>{movie.genre.name}</td>
-								<td>{movie.numberInStock}</td>
-								<td>{movie.dailyRentalRate}</td>
-								<td>
-									<Like
-										liked={movie.liked}
-										//onClick={() => this.handleLike(movie)} //now gotten via props
-										onClick={() => onLike(movie)}
-									/>
-								</td>
-								<td>
-									<button
-										className="btn btn-danger btn-sm"
-										//onClick={() => this.handleDelete(movie)}
-										onClick={() => onDelete(movie)}
-									>
-										{' '}
-										Delete
-									</button>
-								</td>
-							</tr>
-						))}
-					</tbody>
+					<TableBody rows={movies} columns={columns} />
 				</table>
 			</React.Fragment>
 		);
