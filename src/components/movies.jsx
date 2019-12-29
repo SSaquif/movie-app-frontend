@@ -176,9 +176,6 @@ class Movies extends Component {
 						/>
 					</div>
 				</div>
-				<div className="row">
-					<h1>hello</h1>
-				</div>
 			</React.Fragment>
 		);
 	}
