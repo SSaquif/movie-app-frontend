@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { findIconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faSortUp, sortDown } from '@fortawesome/free-regular-svg-icons';
 
 //Class Interface (will need from props)
 
@@ -11,6 +14,8 @@ class TableHeader extends Component {
 		sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
 		this.props.onSort(sortCriteria, sortOrder);
 	};
+
+	renderSortIcon = () => {};
 
 	render() {
 		const { columns, sortOrder } = this.props;

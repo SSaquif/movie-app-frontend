@@ -8,11 +8,6 @@ import TableBody from './common/tableBody';
 const reactElem = <p></p>;
 
 class MoviesTable extends Component {
-	raiseSort = (sortCriteria, sortOrder) => {
-		sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-		this.props.onSort(sortCriteria, sortOrder);
-	};
-
 	render() {
 		//like to do my object destructuring at the very start of every functional component
 		//think of stuff i dont have::PaginatedMovie, handleLike and handleDelete in this SFS anymore (is in movies)
