@@ -1,13 +1,43 @@
 import React, { Component } from 'react';
 import Like from './common/like';
-import TableHeader from './common/tableHeader';
-import TableBody from './common/tableBody';
+import Table from './common/table';
 
 //For example, hence
 //This is a valid react element and react elements are just regularjavascript objects
 const reactElem = <p></p>;
 
 class MoviesTable extends Component {
+	//Setting my columns in an Array to be passed as props
+	//columnKey value should correspond to key names in our data/row(ie movies) object
+	columns = [
+		{ columnHeader: 'Title', columnKey: 'title' },
+		{ columnHeader: 'Genre', columnKey: 'genre.name' },
+		{ columnHeader: 'Stock', columnKey: 'numberInStock' },
+		{ columnHeader: 'Daily Rate', columnKey: 'dailyRentalRate' },
+		{
+			key: 'like',
+			content: (movie) => (
+				<Like
+					liked={movie.liked}
+					//onClick={() => this.handleLike(movie)} //now gotten via props
+					onClick={() => this.props.onLike(movie)}
+				/>
+			)
+		}, //content is reactelem = regular JS object
+		{
+			key: 'delete',
+			//content is function that takes one element
+			//and returns a react element===JS object
+			content: (movie) => (
+				<button
+					className="btn btn-danger btn-sm"
+					onClick={() => this.props.onDelete(movie)}
+				>
+					Delete
+				</button>
+			)
+		}
+	];
 	render() {
 		//like to do my object destructuring at the very start of every functional component
 		//think of stuff i dont have::PaginatedMovie, handleLike and handleDelete in this SFS anymore (is in movies)
@@ -19,47 +49,16 @@ class MoviesTable extends Component {
 		//note that genre is nested object hence column key = genre.name
 		//this is how lodash's orderBy needs them, which I'm using for sorting
 		console.log('moviesTable::props::', this.props);
-		//Setting my columns in an Array to be passed as props
-		//columnKey value should correspond to key names in our data/row(ie movies) object
-		const columns = [
-			{ columnHeader: 'Title', columnKey: 'title' },
-			{ columnHeader: 'Genre', columnKey: 'genre.name' },
-			{ columnHeader: 'Stock', columnKey: 'numberInStock' },
-			{ columnHeader: 'Daily Rate', columnKey: 'dailyRentalRate' },
-			{
-				key: 'like',
-				content: (movie) => (
-					<Like
-						liked={movie.liked}
-						//onClick={() => this.handleLike(movie)} //now gotten via props
-						onClick={() => this.props.onLike(movie)}
-					/>
-				)
-			}, //content is reactelem = regular JS object
-			{
-				key: 'delete',
-				//content is function that takes one element
-				//and returns a react element===JS object
-				content: (movie) => (
-					<button
-						className="btn btn-danger btn-sm"
-						onClick={() => this.props.onDelete(movie)}
-					>
-						Delete
-					</button>
-				)
-			}
-		];
 
 		return (
 			<React.Fragment>
 				<table className="table">
-					<TableHeader
-						columns={columns}
+					<Table
+						rows={movies}
+						columns={this.columns}
 						sortOrder={sortOrder}
 						onSort={onSort}
 					/>
-					<TableBody rows={movies} columns={columns} />
 				</table>
 			</React.Fragment>
 		);
