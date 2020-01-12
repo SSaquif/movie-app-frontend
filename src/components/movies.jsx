@@ -133,7 +133,7 @@ class Movies extends Component {
 		if (filteredMovies.length === 0) {
 			return (
 				<p>
-					<b>There are no movies in the database</b>
+					<b>There are no movies in this genre(s) in the database</b>
 				</p>
 			);
 		}
