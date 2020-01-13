@@ -5,7 +5,7 @@ class TableBody extends Component {
 	renderCell = (row, column) => {
 		if (column.content) {
 			console.log('content::', column.content);
-			return column.content(row); //Will return a react element //column.content is afumctionm
+			return column.content(row); //Will return a react element //column.content is a function
 		}
 		if (column.columnKey) {
 			//return <td>{row[column.columnKey]}</td>; //col.colKey wont work with nested items, so use lodash instead

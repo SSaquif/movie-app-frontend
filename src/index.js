@@ -12,6 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 
 ReactDOM.render(
 	<BrowserRouter>
+		{' '}
+		{/*Adds history object (and match and location I think)*/}
 		<App />
 	</BrowserRouter>,
 	document.getElementById('root')

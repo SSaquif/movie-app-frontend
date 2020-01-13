@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Like from './common/like';
 import Table from './common/table';
 
@@ -10,7 +11,14 @@ class MoviesTable extends Component {
 	//Setting my columns in an Array to be passed as props
 	//columnKey value should correspond to key names in our data/row(ie movies) object
 	columns = [
-		{ columnHeader: 'Title', columnKey: 'title' },
+		{
+			columnHeader: 'Title',
+			columnKey: 'title',
+			content: (movie) => {
+				console.log('MoviesTable::', movie);
+				return <Link to={`/movies/${movie._id}`}>{movie.title}</Link>;
+			}
+		},
 		{ columnHeader: 'Genre', columnKey: 'genre.name' },
 		{ columnHeader: 'Stock', columnKey: 'numberInStock' },
 		{ columnHeader: 'Daily Rate', columnKey: 'dailyRentalRate' },
@@ -23,7 +31,7 @@ class MoviesTable extends Component {
 					onClick={() => this.props.onLike(movie)}
 				/>
 			)
-		}, //content is reactelem = regular JS object
+		}, //content is react element = regular JS object
 		{
 			key: 'delete',
 			//content is function that takes one element
